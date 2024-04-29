@@ -22,21 +22,41 @@ const writeFilePro = (file, data) => {
   });
 };
 
-readFilePro(`${__dirname}/dog.txt`)
-  .then((data) => {
-    console.log(`Breed: ${data}`);
+// readFilePro(`${__dirname}/dog.txt`)
+//   .then((data) => {
+//     console.log(`Breed: ${data}`);
 
-    return superagent.get(`https://dog.ceo/api/breed/${data}/images/random/3`); // chaining promise to promise
-  })
-  .then((res) => {
-    console.log(res.body.message);
-    return writeFilePro('dog-img.txt', JSON.stringify(res.body.message));
-  })
-  .then(() => {
-    console.log('Random dog image saved to file');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+//     return superagent.get(`https://dog.ceo/api/breed/${data}/images/random/3`); // chaining promise to promise
+//   })
+//   .then((res) => {
+//     console.log(res.body.message);
+//     return writeFilePro('dog-img.txt', JSON.stringify(res.body.message));
+//   })
+//   .then(() => {
+//     console.log('Random dog image saved to file');
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
 //chaining every promise to each promise by returning them in every return, so then they are connected
+
+// async await
+const getDogPic = async () => {
+  try {
+    // async says that it is special asynchronous function
+    const data = await readFilePro(`${__dirname}/dog.txt`); // we are saving this promise into data by puttin await, so it will wait for it
+    console.log(`Breed: ${data}`);
+
+    const res = await superagent.get(
+      `https://dog.ceo/api/breed/${data}/images/random/3`
+    );
+    console.log(res.body.message);
+
+    await writeFilePro('dog-img.txt', JSON.stringify(res.body.message));
+    console.log('Random dog image saved to file');
+  } catch (err) {
+    console.log(err);
+  }
+};
+getDogPic();

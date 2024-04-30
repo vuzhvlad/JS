@@ -57,6 +57,30 @@ const getDogPic = async () => {
     console.log('Random dog image saved to file');
   } catch (err) {
     console.log(err);
+    throw err; // if you throw an error it will mark all entire promise as rejected
   }
+
+  return '2: Ready getting dog pics';
 };
-getDogPic();
+// declare and call a function right away, special pattern for using async/await
+(async () => {
+  try {
+    console.log('1: Will get dog pics');
+    const x = await getDogPic(); // returns promise, stroing what it returns
+    console.log(x);
+    console.log('3: Done getting dog pics');
+  } catch (err) {
+    console.log('ERROR');
+  }
+})();
+
+//promise
+// console.log('1: Will get dog pics');
+// getDogPic()
+//   .then((x) => {
+//     console.log(x);
+//     console.log('3: Done getting dog pics');
+//   })
+//   .catch((err) => {
+//     console.log('ERROR');
+//   });

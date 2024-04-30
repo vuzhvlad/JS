@@ -48,12 +48,23 @@ const getDogPic = async () => {
     const data = await readFilePro(`${__dirname}/dog.txt`); // we are saving this promise into data by puttin await, so it will wait for it
     console.log(`Breed: ${data}`);
 
-    const res = await superagent.get(
+    const res1Pro = await superagent.get(
       `https://dog.ceo/api/breed/${data}/images/random/3`
     );
-    console.log(res.body.message);
+    const res2Pro = await superagent.get(
+      `https://dog.ceo/api/breed/${data}/images/random/3`
+    );
+    const res3Pro = await superagent.get(
+      `https://dog.ceo/api/breed/${data}/images/random/3`
+    );
 
-    await writeFilePro('dog-img.txt', JSON.stringify(res.body.message));
+    const all = await Promise.all([res1Pro, res2Pro, res3Pro]); // the way how to get all 3 promises at the same time
+    const imgs = all.map((el) => el.body.message);
+    console.log(all);
+
+    console.log(imgs);
+
+    await writeFilePro('dog-img.txt', JSON.stringify(imgs.join('\n')));
     console.log('Random dog image saved to file');
   } catch (err) {
     console.log(err);
